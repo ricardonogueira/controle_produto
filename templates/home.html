@@ -6,27 +6,32 @@
 
 {% block pagina %}
     <a class="btn btn-success" href="{{ url_for('adicionar') }}">+Adicionar</a>
+    <br>
+    <br >
     <table class="table table-striped table-hover">
-        <tr>
-            <td>#</td>
-            <td>Nome</td>
-            <td>Preço</td>
-            <td>Quantidade</td>
-            <td>Imagem</td>
-            <td colspan="2">Operações</td>
-        </tr>
-
-        {% for produto in produtos %}
-        <tr>
-            <td>{{ produto.id }}</td>
-            <td>{{ produto.nome }}</td>
-            <td>{{ produto.preco }}</td>
-            <td>{{ produto.quantidade }}</td>
-            <td><img height="50" src="{{ url_for('static', filename='uploads/') + produto.foto }}"></td>
-            <td><button id="btn-editar" class="btn btn-info" onclick="editar({{ produto.id }})">Editar</button></td>
-            <td><button id="btn-remover" class="btn btn-danger" onclick="remover({{ produto.id }})">Excluir</button></td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+                <th>Imagem</th>
+                <th colspan="2">Operações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{ produto.id }}</td>
+                <td>{{ produto.nome }}</td>
+                <td>{{ produto.preco }}</td>
+                <td>{{ produto.quantidade }}</td>
+                <td><img height="50" src="{{ url_for('static', filename='uploads/') + produto.foto }}"></td>
+                <td><a id="btn-editar" class="btn btn-info" href="editar/{{ produto.id }}">Editar</a></td>
+                <td><button id="btn-remover" class="btn btn-danger" onclick="remover({{ produto.id }})">Excluir</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
     <script src="{{ url_for('static', filename='js/remover.js') }}"></script>
     <script src="{{ url_for('static', filename='js/editar.js') }}"></script>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Editar Produto
+{% endblock %}
+
+{% block pagina %}
+    <form action="/editar/{{ produto.id }}" method="Post" enctype="multipart/form-data">
+        <label class="form-label" for="nome">Nome:</label>
+        <input class="form-control" type="text" name="nome" id="nome" value="{{ produto.nome }}">
+        <br>
+        <label class="form-label" for="preco">Preço:</label>
+        <input class="form-control" type="text" name="preco" id="preco" value="{{ produto.preco }}">
+        <br>
+        <label class="form-label" for="nome">Quantidade:</label>
+        <input class="form-control" type="text" name="quantidade" id="quantidade" value="{{ produto.quantidade }}">
+        <br>
+        <img height="50" src="{{ url_for('static', filename='uploads/') + produto.foto }}">
+        <input type="hidden" name="imagem" value="{{ produto.foto }}">
+        <br>
+        <label class="form-label" for="nome">Imagem:</label>
+        <input class="form-control" type="file" name="foto" id="foto">
+        <br>
+        <button class="btn btn-primary" type="submit">Editar</button>
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Voltar</a>
+    </form>
+{% endblock %}
