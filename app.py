@@ -1,28 +1,65 @@
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
+import config
 import os
-from banco import produtos
+import json
 
 app = Flask(__name__)
-UPLOAD_FOLDER = os.path.abspath('static/uploads')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-EXTENSOES = {'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
+app.secret_key = config.SECRET_KEY
+
+produtos = []
+
+def gravar_produtos_arquivo():
+    
+    produtos_json = json.dumps(produtos)
+    with open('banco.json', 'w') as arq:
+        arq.write(produtos_json)
+
+def ler_arquivo_json():
+    global produtos
+    with open('banco.json', 'r') as arq:
+            produtos = json.load(arq)
+
+def escrever_arquivo_json():
+     with open('banco.json', 'w+') as arq:
+            arq.write("[]")
+
+def carregar_produtos_arquivo():
+    global produtos
+
+    try:
+        ler_arquivo_json()
+
+    except FileNotFoundError:
+        escrever_arquivo_json()
+        ler_arquivo_json()
+
+carregar_produtos_arquivo()
+
+def extensoes_permitidas(nome_arquivo):
+    return '.' in nome_arquivo and nome_arquivo.rsplit('.', 1)[1].lower() in config.EXTENSOES
+
+def ultimo_id_inserido():
+    return produtos[-1]['id'] if len(produtos) != 0 else 0
+            
+def buscar_indice_produto(id):
+    for indice, produto in enumerate(produtos):
+            if produto['id'] == id:
+                return indice, produto
+    return -1, ""
 
 @app.route('/')
 def home():
     return render_template('home.html', produtos=produtos)
 
-def extensoes_permitidas(nome_arquivo):
-    return '.' in nome_arquivo and nome_arquivo.rsplit('.', 1)[1].lower() in EXTENSOES
-
-
 @app.route('/adicionar', methods=['GET', 'POST'])
 def adicionar():
     if request.method == "POST":
         nome = request.form['nome']
-        preco = request.form['preco']
-        quantidade = request.form['quantidade']
+        preco = float(request.form['preco'])
+        quantidade = int(request.form['quantidade'])
 
         nome_arquivo = 'padrao.jpg'
         if 'foto' in request.files:
@@ -32,24 +69,23 @@ def adicionar():
                     nome_arquivo = secure_filename(foto.filename)
                     foto.save(os.path.join(app.config['UPLOAD_FOLDER'], nome_arquivo))
 
-        ultimo_id = produtos[-1]['id']
+        
+        id = ultimo_id_inserido()
 
-        produtos.append({
-            "id": ultimo_id + 1,
-            "nome": nome,
+        produto = {
+            "id": (id + 1), 
+            "nome": nome, 
             "preco": preco,
-            "quantidade": quantidade,
+            "quantidade": quantidade, 
             "foto": nome_arquivo
-        })
+        }
+
+        produtos.append(produto)
+
+        gravar_produtos_arquivo()
 
         return redirect('/')
     return render_template('adicionar.html')
-
-def buscar_indice_produto(id):
-    for indice, produto in enumerate(produtos):
-            if produto['id'] == id:
-                return indice, produto
-    return -1, ""
 
 @app.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar(id):
@@ -67,14 +103,17 @@ def editar(id):
                     foto.save(os.path.join(app.config['UPLOAD_FOLDER'], nome_arquivo))
 
         if indice != -1:
-            produtos[indice] = {
-                "id": id,
+            produto = {
+                "id": id, 
                 "nome": request.form['nome'],
-                "preco": request.form['preco'],
-                "quantidade": request.form['quantidade'],
-                "foto": nome_arquivo
+                "preco": float(request.form['preco']), 
+                "quantidade": int(request.form['quantidade']),
+                "foto": request.form['imagem']
             }
-    
+            produtos[indice] = produto
+        
+        gravar_produtos_arquivo()
+
         return redirect('/')
             
     produto = {
