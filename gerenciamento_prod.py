@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, flash
 from werkzeug.utils import secure_filename
 import config
 import json
@@ -81,6 +81,7 @@ def adicionar():
 
         gravar_produtos_arquivo()
 
+        flash("Produto Cadastrado com Sucesso")
         return redirect('/')
     return render_template('cadastro/adicionar.html')
 
@@ -99,17 +100,19 @@ def editar(id):
                     nome_arquivo = secure_filename(foto.filename)
                     foto.save(os.path.join(config.UPLOAD_FOLDER, nome_arquivo))
 
+        print(nome_arquivo)
         if indice != -1:
             produto = {
                 "id": id, 
                 "nome": request.form['nome'],
                 "preco": float(request.form['preco']), 
                 "quantidade": int(request.form['quantidade']),
-                "foto": request.form['imagem']
+                "foto": nome_arquivo
             }
             produtos[indice] = produto
         
         gravar_produtos_arquivo()
+        flash("Produto Editado com Sucesso")
 
         return redirect('/')
             
@@ -127,5 +130,5 @@ def editar(id):
 def excluir():
     indice, _ = buscar_indice_produto(int(request.form['id']))
     produtos.pop(indice)
-
+    flash("Produto Excluído com Sucesso")
     return redirect('/')

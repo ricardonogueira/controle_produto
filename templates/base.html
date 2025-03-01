@@ -19,6 +19,16 @@
     </nav>
     <br>
     <div class="container">
+        {% with mensagens = get_flashed_messages() %}
+        {% if mensagens %}
+            {% for mensagem in mensagens %}
+                <div class="alert alert-success" role="alert">
+                    {{ mensagem }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         {% block pagina %}{% endblock %}
     </div>
 </body>
