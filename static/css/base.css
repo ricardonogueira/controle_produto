@@ -1,5 +1,10 @@
-h1#navbar {
+h1 {
     color: white;
+    text-align: left;
+    font-size: small;
+}
+
+h1#navbar {
     font-size: large;
     text-align: center;
 }

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Formulário de Registro de Usuário
+{% endblock %}
+
+{% block pagina %}
+    <form action="/usuario/registrar_usuario" method="POST">
+        <label class="form-label" for="nome">Usuário:</label>
+        <input class="form-control" type="text" name="usuario" id="usuario">
+        <br>
+        <label class="form-label" for="preco">Senha:</label>
+        <input class="form-control" type="text" name="senha" id="senha">
+        <br>
+        <button class="btn btn-primary" type="submit">Registrar</button>
+        <a href="/auth/" class="btn btn-secondary">Voltar</a>
+    </form>
+{% endblock %}

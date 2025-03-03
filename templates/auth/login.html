@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+    Autenticação
+{% endblock %}
+
+{% block pagina %}
+
+    <form action="/auth/autenticar" method="POST">
+        <label class="form-label" for="nome">Usuário:</label>
+        <input class="form-control" type="text" name="usuario" id="usuario">
+        <br>
+        <label class="form-label" for="preco">Senha:</label>
+        <input class="form-control" type="text" name="senha" id="senha">
+        <br>
+        <button class="btn btn-primary" type="submit">Autenticar</button>
+        <a href="/usuario/form_registro" class="btn btn-secondary">Registrar</a>
+    </form>
+    
+{% endblock %}
