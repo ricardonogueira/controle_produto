@@ -1,7 +1,7 @@
 __pycache__/
 *.py[cod]
 
-banco.json
+produtos.json
 usuarios.json
 
 uploads/
