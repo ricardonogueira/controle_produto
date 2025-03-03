@@ -2,3 +2,6 @@ __pycache__/
 *.py[cod]
 
 banco.json
+usuarios.json
+
+uploads/
