@@ -1,7 +1,7 @@
 from flask import Flask
-from gerenciamento_prod import app_prod
-from autenticacao_usuario import app_auth
-from registrar_usuarios import app_registro
+from blueprints.produtos.gerenciamento_prod import app_prod
+from blueprints.autenticacao.autenticacao_usuario import app_auth
+from blueprints.registro_usuarios.registrar_usuarios import app_registro
 import config
 
 app = Flask(__name__)

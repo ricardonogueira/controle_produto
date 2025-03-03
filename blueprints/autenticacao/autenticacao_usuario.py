@@ -1,30 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for,session, flash
+from utils.utils_autenticacao import *
 import json
 
 app_auth = Blueprint('autenticacao', __name__, template_folder='templates/auth/', url_prefix='/auth')
 
-usuarios = []
-
-def ler_arquivo_json():
-    global usuarios
-    with open('usuarios.json', 'r') as arq:
-            usuarios = json.load(arq)
-
-def escrever_arquivo_json():
-     with open('usuarios.json', 'w+') as arq:
-            arq.write("[]")
-
-def carregar_usuarios_arquivo():
-    global produtos
-
-    try:
-        ler_arquivo_json()
-
-    except FileNotFoundError:
-        escrever_arquivo_json()
-        ler_arquivo_json()
-
-carregar_usuarios_arquivo()
+usuarios = carregar_usuarios_arquivo()
 
 @app_auth.route('/')
 def login():
