@@ -4,7 +4,7 @@ function remover (id) {
     console.log(resposta);
 
     if (resposta) {
-        url = '/excluir';
+        url = '/produtos/excluir';
         
         const formData = new FormData();
         formData.append('id', id);

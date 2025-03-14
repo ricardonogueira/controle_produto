@@ -1,7 +1,6 @@
 __pycache__/
 *.py[cod]
 
-produtos.json
-usuarios.json
+projeto.db
 
 uploads/
