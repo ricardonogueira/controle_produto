@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request
-from utils.utils_registrar import *
+from modelos.usuarios import Usuario
+from banco_dados.conexao import db
 
-app_registro = Blueprint('registro_usuario', __name__, template_folder='templates/registro/', url_prefix='/usuario')
+app_registro = Blueprint('registro_usuario', __name__, template_folder='templates', url_prefix='/usuario')
 
 @app_registro.route('/form_registro')
 def registro():
@@ -11,8 +12,15 @@ def registro():
 def registrar():
 
     if request.method == "POST":
-        usuario = request.form['usuario']
-        senha = request.form['senha']
+        usuario_form = request.form['usuario']
+        senha_form = request.form['senha']
 
-        gravar_registro_usuario(usuario, senha)
+        usuario = Usuario(
+            usuario = usuario_form,
+            senha = senha_form
+        )
+        
+        db.session.add(usuario)
+        db.session.commit()
+
     return render_template('registro.html')

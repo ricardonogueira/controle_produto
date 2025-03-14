@@ -15,7 +15,7 @@
         <label class="form-label" for="nome">Quantidade:</label>
         <input class="form-control" type="text" name="quantidade" id="quantidade" value="{{ produto.quantidade }}">
         <br>
-        <img height="50" src="{{ url_for('static', filename='uploads/') + produto.foto }}">
+        <img height="50" src="{{ url_for('cad_prod.static', filename='uploads/'+ produto.foto) }}">
         <input type="hidden" name="imagem" value="{{ produto.foto }}">
         <br>
         <label class="form-label" for="nome">Imagem:</label>
